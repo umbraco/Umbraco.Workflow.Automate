@@ -1,0 +1,1 @@
+C:\Users\AmalieWowern\git\Umbraco.Workflow.Automate\src\Umbraco.Workflow.Automate\obj\Debug\net10.0\Umbraco.Workflow.Automate.csproj.AssemblyReference.cache

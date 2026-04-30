@@ -1,0 +1,67 @@
+using Umbraco.Automate.Core.Settings;
+using Umbraco.Automate.Core.Triggers;
+using Umbraco.Cms.Core.Events;
+using Umbraco.Workflow.Automate.Triggers;
+using Umbraco.Workflow.Automate.Triggers.Outputs;
+using Umbraco.Workflow.Core.Models.Enums;
+using Umbraco.Workflow.Core.Models.Pocos;
+using Umbraco.Workflow.Core.Notifications;
+
+namespace Umbraco.Workflow.Automate.Tests.Unit.Triggers;
+
+public class WorkflowResubmittedTriggerTests
+{
+    private readonly WorkflowResubmittedTrigger _trigger = new(
+        new TriggerInfrastructure(Mock.Of<IEditableModelResolver>()));
+
+    [Fact]
+    public void MapEvent_ReturnsCorrectAlias()
+    {
+        var notification = BuildNotification();
+
+        var events = _trigger.MapEvent(notification).ToList();
+
+        events.ShouldHaveSingleItem();
+        events[0].TriggerAlias.ShouldBe("umbracoworkflow.resubmitted");
+    }
+
+    [Fact]
+    public void MapEvent_ReturnsSystemInitiatorType()
+    {
+        var notification = BuildNotification();
+
+        var events = _trigger.MapEvent(notification).ToList();
+
+        events[0].InitiatorType.ShouldBe("system");
+    }
+
+    [Fact]
+    public void MapEvent_MapsInstanceProperties()
+    {
+        var authorId = Guid.NewGuid();
+        var instance = new WorkflowInstancePoco
+        {
+            NodeId = 100,
+            Type = (int)WorkflowType.Publish,
+            AuthorUserId = authorId,
+            AuthorComment = "Resubmitting after fixes",
+            TotalSteps = 2,
+        };
+        var notification = new WorkflowInstanceResubmittedNotification(instance, new EventMessages());
+
+        var events = _trigger.MapEvent(notification).ToList();
+
+        var output = ((TriggerEvent<WorkflowInstanceTriggerOutput>)events[0]).Output;
+        output.NodeId.ShouldBe(100);
+        output.WorkflowType.ShouldBe("Publish");
+        output.AuthorUserId.ShouldBe(authorId);
+        output.AuthorComment.ShouldBe("Resubmitting after fixes");
+        output.TotalSteps.ShouldBe(2);
+    }
+
+    private static WorkflowInstanceResubmittedNotification BuildNotification()
+    {
+        var instance = new WorkflowInstancePoco { Type = (int)WorkflowType.Publish };
+        return new WorkflowInstanceResubmittedNotification(instance, new EventMessages());
+    }
+}

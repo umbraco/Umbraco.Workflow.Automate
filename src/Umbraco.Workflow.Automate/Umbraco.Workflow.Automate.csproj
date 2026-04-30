@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <Title>Umbraco Workflow Automate</Title>
+        <Description>Umbraco Workflow triggers for Umbraco Automate</Description>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Umbraco.Automate.Core" />
+        <PackageReference Include="Umbraco.Workflow.Core" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Umbraco.Workflow.Automate.Tests.Unit" />
+    </ItemGroup>
+
+</Project>
