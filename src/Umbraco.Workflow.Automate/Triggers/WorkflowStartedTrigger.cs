@@ -16,7 +16,7 @@ public sealed class WorkflowStartedTrigger
 
     public override IEnumerable<TriggerEvent> MapEvent(WorkflowInstanceCreatedNotification notification)
     {
-        var instance = notification.Target as WorkflowInstancePoco;
+        var instance = notification.CreatedEntity as WorkflowInstancePoco;
         yield return new TriggerEvent<WorkflowInstanceTriggerOutput>
         {
             TriggerAlias = Alias,
@@ -25,7 +25,7 @@ public sealed class WorkflowStartedTrigger
             {
                 NodeId = instance?.NodeId ?? 0,
                 EntityKey = instance?.EntityKey,
-                WorkflowType = notification.Target.WorkflowType.ToString(),
+                WorkflowType = notification.CreatedEntity.WorkflowType.ToString(),
                 WorkflowStatus = instance?.WorkflowStatus.ToString() ?? string.Empty,
                 AuthorUserId = instance?.AuthorUserId ?? Guid.Empty,
                 AuthorComment = instance?.AuthorComment ?? string.Empty,

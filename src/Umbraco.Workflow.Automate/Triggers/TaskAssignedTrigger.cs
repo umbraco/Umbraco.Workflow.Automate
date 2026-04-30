@@ -16,7 +16,7 @@ public sealed class TaskAssignedTrigger
 
     public override IEnumerable<TriggerEvent> MapEvent(WorkflowTaskCreatedNotification notification)
     {
-        var task = notification.Target as WorkflowTaskPoco;
+        var task = notification.CreatedEntity as WorkflowTaskPoco;
         yield return new TriggerEvent<TaskAssignedTriggerOutput>
         {
             TriggerAlias = Alias,

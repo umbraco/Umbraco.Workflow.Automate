@@ -16,7 +16,7 @@ public sealed class WorkflowResubmittedTrigger
 
     public override IEnumerable<TriggerEvent> MapEvent(WorkflowInstanceResubmittedNotification notification)
     {
-        var instance = notification.Target as WorkflowInstancePoco;
+        var instance = notification.UpdatedEntity as WorkflowInstancePoco;
         yield return new TriggerEvent<WorkflowInstanceTriggerOutput>
         {
             TriggerAlias = Alias,
@@ -25,7 +25,7 @@ public sealed class WorkflowResubmittedTrigger
             {
                 NodeId = instance?.NodeId ?? 0,
                 EntityKey = instance?.EntityKey,
-                WorkflowType = notification.Target.WorkflowType.ToString(),
+                WorkflowType = notification.UpdatedEntity.WorkflowType.ToString(),
                 WorkflowStatus = instance?.WorkflowStatus.ToString() ?? string.Empty,
                 AuthorUserId = instance?.AuthorUserId ?? Guid.Empty,
                 AuthorComment = instance?.AuthorComment ?? string.Empty,

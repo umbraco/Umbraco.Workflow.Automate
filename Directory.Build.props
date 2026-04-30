@@ -13,5 +13,11 @@
 
   <PropertyGroup>
     <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+    <PackageProjectUrl>https://github.com/umbraco/Umbraco.Workflow.Automate</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/umbraco/Umbraco.Workflow.Automate</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>umbraco;workflow;automate;automation;approval</PackageTags>
   </PropertyGroup>
 </Project>
