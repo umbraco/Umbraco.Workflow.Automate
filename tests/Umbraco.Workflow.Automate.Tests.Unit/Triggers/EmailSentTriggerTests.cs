@@ -22,7 +22,7 @@ public class EmailSentTriggerTests
         var events = _trigger.MapEvent(notification).ToList();
 
         events.ShouldHaveSingleItem();
-        events[0].TriggerAlias.ShouldBe("umbracoworkflow.emailSent");
+        events[0].TriggerAlias.ShouldBe("umbracoWorkflow.emailSent");
     }
 
     [Fact]

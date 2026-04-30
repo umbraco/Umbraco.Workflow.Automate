@@ -4,7 +4,7 @@ using Umbraco.Workflow.Core.Email.Notifications;
 
 namespace Umbraco.Workflow.Automate.Triggers;
 
-[Trigger("umbracoworkflow.emailSent", "Workflow Email Sent",
+[Trigger("umbracoWorkflow.emailSent", "Workflow Email Sent",
     Description = "Fires when a workflow notification email is sent.",
     Group = "Workflow",
     Icon = "icon-bell")]

@@ -22,7 +22,7 @@ public class WorkflowResubmittedTriggerTests
         var events = _trigger.MapEvent(notification).ToList();
 
         events.ShouldHaveSingleItem();
-        events[0].TriggerAlias.ShouldBe("umbracoworkflow.resubmitted");
+        events[0].TriggerAlias.ShouldBe("umbracoWorkflow.resubmitted");
     }
 
     [Fact]

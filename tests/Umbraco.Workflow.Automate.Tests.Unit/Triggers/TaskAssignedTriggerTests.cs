@@ -23,7 +23,7 @@ public class TaskAssignedTriggerTests
         var events = _trigger.MapEvent(notification).ToList();
 
         events.ShouldHaveSingleItem();
-        events[0].TriggerAlias.ShouldBe("umbracoworkflow.taskAssigned");
+        events[0].TriggerAlias.ShouldBe("umbracoWorkflow.taskAssigned");
     }
 
     [Fact]
@@ -60,17 +60,14 @@ public class TaskAssignedTriggerTests
     }
 
     [Fact]
-    public void MapEvent_WithNullCast_UsesDefaults()
+    public void MapEvent_WithNonPocoTarget_YieldsNoEvent()
     {
         var task = Mock.Of<IWorkflowTask>();
         var notification = new WorkflowTaskCreatedNotification(task, new EventMessages());
 
         var events = _trigger.MapEvent(notification).ToList();
 
-        var output = ((TriggerEvent<TaskAssignedTriggerOutput>)events[0]).Output;
-        output.ApprovalStep.ShouldBe(0);
-        output.GroupId.ShouldBeNull();
-        output.WorkflowInstanceGuid.ShouldBe(Guid.Empty);
+        events.ShouldBeEmpty();
     }
 
     private static WorkflowTaskCreatedNotification BuildNotification()

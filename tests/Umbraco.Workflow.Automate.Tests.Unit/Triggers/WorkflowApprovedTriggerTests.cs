@@ -22,7 +22,7 @@ public class WorkflowApprovedTriggerTests
         var events = _trigger.MapEvent(notification).ToList();
 
         events.ShouldHaveSingleItem();
-        events[0].TriggerAlias.ShouldBe("umbracoworkflow.approved");
+        events[0].TriggerAlias.ShouldBe("umbracoWorkflow.approved");
     }
 
     [Fact]

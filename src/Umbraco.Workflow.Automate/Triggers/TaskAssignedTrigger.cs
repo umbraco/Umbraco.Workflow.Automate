@@ -5,7 +5,7 @@ using Umbraco.Workflow.Core.Notifications;
 
 namespace Umbraco.Workflow.Automate.Triggers;
 
-[Trigger("umbracoworkflow.taskAssigned", "Task Assigned",
+[Trigger("umbracoWorkflow.taskAssigned", "Task Assigned",
     Description = "Fires when a new workflow approval task is created and assigned.",
     Group = "Workflow",
     Icon = "icon-user")]
@@ -16,17 +16,21 @@ public sealed class TaskAssignedTrigger
 
     public override IEnumerable<TriggerEvent> MapEvent(WorkflowTaskCreatedNotification notification)
     {
-        var task = notification.Target as WorkflowTaskPoco;
+        if (notification.Target is not WorkflowTaskPoco task)
+        {
+            yield break;
+        }
+
         yield return new TriggerEvent<TaskAssignedTriggerOutput>
         {
             TriggerAlias = Alias,
             InitiatorType = "system",
             Output = new TaskAssignedTriggerOutput
             {
-                ApprovalStep = task?.ApprovalStep ?? 0,
-                GroupId = task?.GroupId,
-                WorkflowInstanceGuid = task?.WorkflowInstanceGuid ?? Guid.Empty,
-                TaskType = task?.TaskStatus?.ToString() ?? string.Empty,
+                ApprovalStep = task.ApprovalStep,
+                GroupId = task.GroupId,
+                WorkflowInstanceGuid = task.WorkflowInstanceGuid,
+                TaskType = task.TaskStatus?.ToString() ?? string.Empty,
             },
         };
     }

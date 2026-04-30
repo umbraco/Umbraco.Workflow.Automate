@@ -79,7 +79,7 @@ All properties from above, plus:
 |---|---|---|
 | `EmailType` | `string` | Type of email (e.g. `"ApprovalRequest"`, `"ApprovedNotification"`) |
 | `RecipientCount` | `int` | Number of recipients |
-| `RecipientEmails` | `IEnumerable<string>` | Email addresses (excludes null and group emails) |
+| `RecipientEmails` | `IEnumerable<string>` | Recipient email addresses (null/empty entries are filtered out) |
 
 #### Reminder Emails Sent Output
 
@@ -123,7 +123,7 @@ dotnet add package Umbraco.Workflow.Automate
 ### Notify a Slack channel when a workflow is rejected
 
 ```
-Trigger: Workflow Rejected (umbracoworkflow.rejected)
+Trigger: Workflow Rejected (umbracoWorkflow.rejected)
   → Action: Post Slack message to #content-team
             "Workflow rejected for node {NodeId}: {AuthorComment}"
 ```
@@ -131,7 +131,7 @@ Trigger: Workflow Rejected (umbracoworkflow.rejected)
 ### Send an alert when content review is overdue
 
 ```
-Trigger: Reminder Emails Sent (umbracoworkflow.reminderEmailsSent)
+Trigger: Reminder Emails Sent (umbracoWorkflow.reminderEmailsSent)
   → Condition: TaskCount > 5
   → Action: Send escalation email to content manager
 ```
@@ -139,7 +139,7 @@ Trigger: Reminder Emails Sent (umbracoworkflow.reminderEmailsSent)
 ### Log all completed publish workflows
 
 ```
-Trigger: Workflow Completed (umbracoworkflow.completed)
+Trigger: Workflow Completed (umbracoWorkflow.completed)
   → Condition: WorkflowType == "Publish"
   → Action: Write to external log
             "Published by {AuthorUserId} after {TotalSteps} steps"
@@ -148,7 +148,7 @@ Trigger: Workflow Completed (umbracoworkflow.completed)
 ### React when a specific approval group is assigned
 
 ```
-Trigger: Task Assigned (umbracoworkflow.taskAssigned)
+Trigger: Task Assigned (umbracoWorkflow.taskAssigned)
   → Condition: GroupId == "your-group-guid"
   → Action: Send notification to group members
 ```
@@ -156,7 +156,7 @@ Trigger: Task Assigned (umbracoworkflow.taskAssigned)
 ### Audit all outgoing workflow emails
 
 ```
-Trigger: Workflow Email Sent (umbracoworkflow.emailSent)
+Trigger: Workflow Email Sent (umbracoWorkflow.emailSent)
   → Action: Write recipients and email type to audit log
 ```
 

@@ -23,7 +23,7 @@ public class WorkflowStartedTriggerTests
         var events = _trigger.MapEvent(notification).ToList();
 
         events.ShouldHaveSingleItem();
-        events[0].TriggerAlias.ShouldBe("umbracoworkflow.started");
+        events[0].TriggerAlias.ShouldBe("umbracoWorkflow.started");
     }
 
     [Fact]
@@ -66,16 +66,14 @@ public class WorkflowStartedTriggerTests
     }
 
     [Fact]
-    public void MapEvent_WithNullCast_UsesDefaults()
+    public void MapEvent_WithNonPocoTarget_YieldsNoEvent()
     {
         var instance = Mock.Of<IWorkflowInstance>(x => x.Type == (int)WorkflowType.Publish && x.WorkflowType == WorkflowType.Publish);
         var notification = new WorkflowInstanceCreatedNotification(instance, new EventMessages());
 
         var events = _trigger.MapEvent(notification).ToList();
 
-        var output = ((TriggerEvent<WorkflowInstanceTriggerOutput>)events[0]).Output;
-        output.NodeId.ShouldBe(0);
-        output.AuthorComment.ShouldBeEmpty();
+        events.ShouldBeEmpty();
     }
 
     private static WorkflowInstanceCreatedNotification BuildNotification()

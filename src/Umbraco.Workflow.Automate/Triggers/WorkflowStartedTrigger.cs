@@ -5,7 +5,7 @@ using Umbraco.Workflow.Core.Notifications;
 
 namespace Umbraco.Workflow.Automate.Triggers;
 
-[Trigger("umbracoworkflow.started", "Workflow Started",
+[Trigger("umbracoWorkflow.started", "Workflow Started",
     Description = "Fires when a new workflow instance is created.",
     Group = "Workflow",
     Icon = "icon-activity")]
@@ -16,22 +16,26 @@ public sealed class WorkflowStartedTrigger
 
     public override IEnumerable<TriggerEvent> MapEvent(WorkflowInstanceCreatedNotification notification)
     {
-        var instance = notification.Target as WorkflowInstancePoco;
+        if (notification.Target is not WorkflowInstancePoco instance)
+        {
+            yield break;
+        }
+
         yield return new TriggerEvent<WorkflowInstanceTriggerOutput>
         {
             TriggerAlias = Alias,
             InitiatorType = "system",
             Output = new WorkflowInstanceTriggerOutput
             {
-                NodeId = instance?.NodeId ?? 0,
-                EntityKey = instance?.EntityKey,
-                WorkflowType = notification.Target.WorkflowType.ToString(),
-                WorkflowStatus = instance?.WorkflowStatus.ToString() ?? string.Empty,
-                AuthorUserId = instance?.AuthorUserId ?? Guid.Empty,
-                AuthorComment = instance?.AuthorComment ?? string.Empty,
-                Culture = instance?.Culture ?? string.Empty,
-                TotalSteps = instance?.TotalSteps ?? 0,
-                CreatedDate = instance?.CreatedDate ?? DateTime.UtcNow,
+                NodeId = instance.NodeId,
+                EntityKey = instance.EntityKey,
+                WorkflowType = instance.WorkflowType.ToString(),
+                WorkflowStatus = instance.WorkflowStatus.ToString(),
+                AuthorUserId = instance.AuthorUserId,
+                AuthorComment = instance.AuthorComment ?? string.Empty,
+                Culture = instance.Culture ?? string.Empty,
+                TotalSteps = instance.TotalSteps,
+                CreatedDate = instance.CreatedDate,
             },
         };
     }
