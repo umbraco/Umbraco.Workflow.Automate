@@ -7,6 +7,7 @@ using Umbraco.Workflow.Core.Interfaces;
 using Umbraco.Workflow.Core.Models.Enums;
 using Umbraco.Workflow.Core.Models.Pocos;
 using Umbraco.Workflow.Core.Notifications;
+using WorkflowTaskStatus = Umbraco.Workflow.Core.Models.Enums.TaskStatus;
 
 namespace Umbraco.Workflow.Automate.Tests.Unit.Triggers;
 
@@ -46,7 +47,7 @@ public class TaskAssignedTriggerTests
             ApprovalStep = 2,
             GroupId = groupId,
             WorkflowInstanceGuid = instanceGuid,
-            Status = (int)TaskStatus.PendingApproval,
+            Status = (int)WorkflowTaskStatus.PendingApproval,
         };
         var notification = new WorkflowTaskCreatedNotification(task, new EventMessages());
 

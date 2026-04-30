@@ -51,7 +51,7 @@ public class EmailSentTriggerTests
         var output = ((TriggerEvent<EmailSentTriggerOutput>)events[0]).Output;
         output.EmailType.ShouldBe("ApprovalRequest");
         output.RecipientCount.ShouldBe(3);
-        output.RecipientEmails.Count.ShouldBe(2);
+        output.RecipientEmails.Count().ShouldBe(2);
         output.RecipientEmails.ShouldContain("alice@example.com");
         output.RecipientEmails.ShouldContain("bob@example.com");
     }
