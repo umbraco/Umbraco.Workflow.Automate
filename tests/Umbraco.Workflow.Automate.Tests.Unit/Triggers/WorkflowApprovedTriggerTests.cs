@@ -1,8 +1,10 @@
+using Microsoft.Extensions.Logging.Abstractions;
 using Umbraco.Automate.Core.Settings;
 using Umbraco.Automate.Core.Triggers;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Workflow.Automate.Triggers;
 using Umbraco.Workflow.Automate.Triggers.Outputs;
+using Umbraco.Workflow.Core.Interfaces;
 using Umbraco.Workflow.Core.Models.Enums;
 using Umbraco.Workflow.Core.Models.Pocos;
 using Umbraco.Workflow.Core.Notifications;
@@ -12,7 +14,8 @@ namespace Umbraco.Workflow.Automate.Tests.Unit.Triggers;
 public class WorkflowApprovedTriggerTests
 {
     private readonly WorkflowApprovedTrigger _trigger = new(
-        new TriggerInfrastructure(Mock.Of<IEditableModelResolver>()));
+        new TriggerInfrastructure(Mock.Of<IEditableModelResolver>()),
+        NullLogger<WorkflowApprovedTrigger>.Instance);
 
     [Fact]
     public void MapEvent_ReturnsCorrectAlias()
@@ -55,6 +58,17 @@ public class WorkflowApprovedTriggerTests
         output.WorkflowType.ShouldBe("Publish");
         output.AuthorUserId.ShouldBe(authorId);
         output.TotalSteps.ShouldBe(1);
+    }
+
+    [Fact]
+    public void MapEvent_WithNonPocoTarget_YieldsNoEvent()
+    {
+        var instance = Mock.Of<IWorkflowInstance>();
+        var notification = new WorkflowInstanceApprovedNotification(instance, new EventMessages());
+
+        var events = _trigger.MapEvent(notification).ToList();
+
+        events.ShouldBeEmpty();
     }
 
     private static WorkflowInstanceApprovedNotification BuildNotification()

@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Umbraco.Automate.Core.Triggers;
 using Umbraco.Workflow.Automate.Triggers.Outputs;
 using Umbraco.Workflow.Core.Models.Pocos;
@@ -12,12 +13,23 @@ namespace Umbraco.Workflow.Automate.Triggers;
 public sealed class WorkflowRejectedTrigger
     : NotificationTriggerBase<object, WorkflowInstanceTriggerOutput, WorkflowInstanceRejectedNotification>
 {
-    public WorkflowRejectedTrigger(TriggerInfrastructure infrastructure) : base(infrastructure) { }
+    private readonly ILogger<WorkflowRejectedTrigger> _logger;
+
+    public WorkflowRejectedTrigger(TriggerInfrastructure infrastructure, ILogger<WorkflowRejectedTrigger> logger)
+        : base(infrastructure)
+    {
+        _logger = logger;
+    }
 
     public override IEnumerable<TriggerEvent> MapEvent(WorkflowInstanceRejectedNotification notification)
     {
-        if (notification.Target is not WorkflowInstancePoco instance)
+        if (notification.UpdatedEntity is not WorkflowInstancePoco instance)
         {
+            _logger.LogWarning(
+                "{TriggerAlias}: expected {ExpectedType}, received {ActualType}; skipping.",
+                Alias,
+                nameof(WorkflowInstancePoco),
+                notification.UpdatedEntity?.GetType().FullName ?? "null");
             yield break;
         }
 

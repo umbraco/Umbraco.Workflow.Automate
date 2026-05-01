@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging.Abstractions;
 using Umbraco.Automate.Core.Settings;
 using Umbraco.Automate.Core.Triggers;
 using Umbraco.Cms.Core.Events;
@@ -14,7 +15,8 @@ namespace Umbraco.Workflow.Automate.Tests.Unit.Triggers;
 public class TaskAssignedTriggerTests
 {
     private readonly TaskAssignedTrigger _trigger = new(
-        new TriggerInfrastructure(Mock.Of<IEditableModelResolver>()));
+        new TriggerInfrastructure(Mock.Of<IEditableModelResolver>()),
+        NullLogger<TaskAssignedTrigger>.Instance);
 
     [Fact]
     public void MapEvent_ReturnsCorrectAlias()
@@ -58,6 +60,22 @@ public class TaskAssignedTriggerTests
         output.GroupId.ShouldBe(groupId);
         output.WorkflowInstanceGuid.ShouldBe(instanceGuid);
         output.TaskType.ShouldBe("PendingApproval");
+    }
+
+    [Fact]
+    public void MapEvent_WithNullTaskStatus_FallsBackToEmpty()
+    {
+        var task = new WorkflowTaskPoco
+        {
+            ApprovalStep = 1,
+            Status = null,
+        };
+        var notification = new WorkflowTaskCreatedNotification(task, new EventMessages());
+
+        var events = _trigger.MapEvent(notification).ToList();
+
+        var output = ((TriggerEvent<TaskAssignedTriggerOutput>)events[0]).Output;
+        output.TaskType.ShouldBeEmpty();
     }
 
     [Fact]

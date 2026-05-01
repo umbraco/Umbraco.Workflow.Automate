@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Umbraco.Automate.Core.Triggers;
 using Umbraco.Workflow.Automate.Triggers.Outputs;
 using Umbraco.Workflow.Core.Models.Pocos;
@@ -12,12 +13,23 @@ namespace Umbraco.Workflow.Automate.Triggers;
 public sealed class TaskAssignedTrigger
     : NotificationTriggerBase<object, TaskAssignedTriggerOutput, WorkflowTaskCreatedNotification>
 {
-    public TaskAssignedTrigger(TriggerInfrastructure infrastructure) : base(infrastructure) { }
+    private readonly ILogger<TaskAssignedTrigger> _logger;
+
+    public TaskAssignedTrigger(TriggerInfrastructure infrastructure, ILogger<TaskAssignedTrigger> logger)
+        : base(infrastructure)
+    {
+        _logger = logger;
+    }
 
     public override IEnumerable<TriggerEvent> MapEvent(WorkflowTaskCreatedNotification notification)
     {
-        if (notification.Target is not WorkflowTaskPoco task)
+        if (notification.CreatedEntity is not WorkflowTaskPoco task)
         {
+            _logger.LogWarning(
+                "{TriggerAlias}: expected {ExpectedType}, received {ActualType}; skipping.",
+                Alias,
+                nameof(WorkflowTaskPoco),
+                notification.CreatedEntity?.GetType().FullName ?? "null");
             yield break;
         }
 

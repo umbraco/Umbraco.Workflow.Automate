@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging.Abstractions;
 using Umbraco.Automate.Core.Settings;
 using Umbraco.Automate.Core.Triggers;
 using Umbraco.Cms.Core.Events;
@@ -13,7 +14,8 @@ namespace Umbraco.Workflow.Automate.Tests.Unit.Triggers;
 public class WorkflowStartedTriggerTests
 {
     private readonly WorkflowStartedTrigger _trigger = new(
-        new TriggerInfrastructure(Mock.Of<IEditableModelResolver>()));
+        new TriggerInfrastructure(Mock.Of<IEditableModelResolver>()),
+        NullLogger<WorkflowStartedTrigger>.Instance);
 
     [Fact]
     public void MapEvent_ReturnsCorrectAlias()
@@ -63,6 +65,26 @@ public class WorkflowStartedTriggerTests
         output.AuthorComment.ShouldBe("Please review");
         output.Culture.ShouldBe("en-US");
         output.TotalSteps.ShouldBe(3);
+    }
+
+    [Fact]
+    public void MapEvent_WithNullStringFields_FallsBackToEmptyAndPropagatesNullKey()
+    {
+        var instance = new WorkflowInstancePoco
+        {
+            Type = (int)WorkflowType.Publish,
+            EntityKey = null,
+            AuthorComment = null!,
+            Culture = null!,
+        };
+        var notification = new WorkflowInstanceCreatedNotification(instance, new EventMessages());
+
+        var events = _trigger.MapEvent(notification).ToList();
+
+        var output = ((TriggerEvent<WorkflowInstanceTriggerOutput>)events[0]).Output;
+        output.EntityKey.ShouldBeNull();
+        output.AuthorComment.ShouldBeEmpty();
+        output.Culture.ShouldBeEmpty();
     }
 
     [Fact]
