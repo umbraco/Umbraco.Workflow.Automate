@@ -1,8 +1,10 @@
+using Microsoft.Extensions.Logging.Abstractions;
 using Umbraco.Automate.Core.Settings;
 using Umbraco.Automate.Core.Triggers;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Workflow.Automate.Triggers;
 using Umbraco.Workflow.Automate.Triggers.Outputs;
+using Umbraco.Workflow.Core.Interfaces;
 using Umbraco.Workflow.Core.Models.Enums;
 using Umbraco.Workflow.Core.Models.Pocos;
 using Umbraco.Workflow.Core.Notifications;
@@ -12,7 +14,8 @@ namespace Umbraco.Workflow.Automate.Tests.Unit.Triggers;
 public class WorkflowCancelledTriggerTests
 {
     private readonly WorkflowCancelledTrigger _trigger = new(
-        new TriggerInfrastructure(Mock.Of<IEditableModelResolver>()));
+        new TriggerInfrastructure(Mock.Of<IEditableModelResolver>()),
+        NullLogger<WorkflowCancelledTrigger>.Instance);
 
     [Fact]
     public void MapEvent_ReturnsCorrectAlias()
@@ -22,7 +25,7 @@ public class WorkflowCancelledTriggerTests
         var events = _trigger.MapEvent(notification).ToList();
 
         events.ShouldHaveSingleItem();
-        events[0].TriggerAlias.ShouldBe("umbracoworkflow.cancelled");
+        events[0].TriggerAlias.ShouldBe("umbracoWorkflow.cancelled");
     }
 
     [Fact]
@@ -53,6 +56,17 @@ public class WorkflowCancelledTriggerTests
         output.NodeId.ShouldBe(77);
         output.EntityKey.ShouldBe(entityKey);
         output.WorkflowType.ShouldBe("Unpublish");
+    }
+
+    [Fact]
+    public void MapEvent_WithNonPocoTarget_YieldsNoEvent()
+    {
+        var instance = Mock.Of<IWorkflowInstance>();
+        var notification = new WorkflowInstanceCancelledNotification(instance, new EventMessages());
+
+        var events = _trigger.MapEvent(notification).ToList();
+
+        events.ShouldBeEmpty();
     }
 
     private static WorkflowInstanceCancelledNotification BuildNotification()

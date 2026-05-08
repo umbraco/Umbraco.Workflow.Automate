@@ -22,7 +22,7 @@ public class ContentReviewCompletedTriggerTests
         var events = _trigger.MapEvent(notification).ToList();
 
         events.ShouldHaveSingleItem();
-        events[0].TriggerAlias.ShouldBe("umbracoworkflow.contentReviewCompleted");
+        events[0].TriggerAlias.ShouldBe("umbracoWorkflow.contentReviewCompleted");
     }
 
     [Fact]

@@ -1,8 +1,10 @@
+using Microsoft.Extensions.Logging.Abstractions;
 using Umbraco.Automate.Core.Settings;
 using Umbraco.Automate.Core.Triggers;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Workflow.Automate.Triggers;
 using Umbraco.Workflow.Automate.Triggers.Outputs;
+using Umbraco.Workflow.Core.Interfaces;
 using Umbraco.Workflow.Core.Models.Enums;
 using Umbraco.Workflow.Core.Models.Pocos;
 using Umbraco.Workflow.Core.Notifications;
@@ -12,7 +14,8 @@ namespace Umbraco.Workflow.Automate.Tests.Unit.Triggers;
 public class WorkflowCompletedTriggerTests
 {
     private readonly WorkflowCompletedTrigger _trigger = new(
-        new TriggerInfrastructure(Mock.Of<IEditableModelResolver>()));
+        new TriggerInfrastructure(Mock.Of<IEditableModelResolver>()),
+        NullLogger<WorkflowCompletedTrigger>.Instance);
 
     [Fact]
     public void MapEvent_ReturnsCorrectAlias()
@@ -22,7 +25,7 @@ public class WorkflowCompletedTriggerTests
         var events = _trigger.MapEvent(notification).ToList();
 
         events.ShouldHaveSingleItem();
-        events[0].TriggerAlias.ShouldBe("umbracoworkflow.completed");
+        events[0].TriggerAlias.ShouldBe("umbracoWorkflow.completed");
     }
 
     [Fact]
@@ -55,6 +58,37 @@ public class WorkflowCompletedTriggerTests
         output.WorkflowType.ShouldBe("Unpublish");
         output.TotalSteps.ShouldBe(2);
         output.CompletedDate.ShouldBe(completedDate);
+    }
+
+    [Fact]
+    public void MapEvent_WithNullStringFields_FallsBackToEmptyAndPropagatesNullKey()
+    {
+        var instance = new WorkflowInstancePoco
+        {
+            Type = (int)WorkflowType.Publish,
+            EntityKey = null,
+            AuthorComment = null!,
+            Culture = null!,
+        };
+        var notification = new WorkflowInstanceCompletedNotification(instance, new EventMessages());
+
+        var events = _trigger.MapEvent(notification).ToList();
+
+        var output = ((TriggerEvent<WorkflowCompletedTriggerOutput>)events[0]).Output;
+        output.EntityKey.ShouldBeNull();
+        output.AuthorComment.ShouldBeEmpty();
+        output.Culture.ShouldBeEmpty();
+    }
+
+    [Fact]
+    public void MapEvent_WithNonPocoCompletedInstance_YieldsNoEvent()
+    {
+        var instance = Mock.Of<IWorkflowInstance>(x => x.Type == (int)WorkflowType.Publish);
+        var notification = new WorkflowInstanceCompletedNotification(instance, new EventMessages());
+
+        var events = _trigger.MapEvent(notification).ToList();
+
+        events.ShouldBeEmpty();
     }
 
     private static WorkflowInstanceCompletedNotification BuildNotification()

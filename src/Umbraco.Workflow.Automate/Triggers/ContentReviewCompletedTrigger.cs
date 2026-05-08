@@ -4,7 +4,7 @@ using Umbraco.Workflow.Core.ContentReviews.Notifications;
 
 namespace Umbraco.Workflow.Automate.Triggers;
 
-[Trigger("umbracoworkflow.contentReviewCompleted", "Content Review Completed",
+[Trigger("umbracoWorkflow.contentReviewCompleted", "Content Review Completed",
     Description = "Fires when a content review is completed.",
     Group = "Workflow",
     Icon = "icon-document")]

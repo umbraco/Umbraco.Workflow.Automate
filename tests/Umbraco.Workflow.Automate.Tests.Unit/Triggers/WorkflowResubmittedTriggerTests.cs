@@ -1,8 +1,10 @@
+using Microsoft.Extensions.Logging.Abstractions;
 using Umbraco.Automate.Core.Settings;
 using Umbraco.Automate.Core.Triggers;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Workflow.Automate.Triggers;
 using Umbraco.Workflow.Automate.Triggers.Outputs;
+using Umbraco.Workflow.Core.Interfaces;
 using Umbraco.Workflow.Core.Models.Enums;
 using Umbraco.Workflow.Core.Models.Pocos;
 using Umbraco.Workflow.Core.Notifications;
@@ -12,7 +14,8 @@ namespace Umbraco.Workflow.Automate.Tests.Unit.Triggers;
 public class WorkflowResubmittedTriggerTests
 {
     private readonly WorkflowResubmittedTrigger _trigger = new(
-        new TriggerInfrastructure(Mock.Of<IEditableModelResolver>()));
+        new TriggerInfrastructure(Mock.Of<IEditableModelResolver>()),
+        NullLogger<WorkflowResubmittedTrigger>.Instance);
 
     [Fact]
     public void MapEvent_ReturnsCorrectAlias()
@@ -22,7 +25,7 @@ public class WorkflowResubmittedTriggerTests
         var events = _trigger.MapEvent(notification).ToList();
 
         events.ShouldHaveSingleItem();
-        events[0].TriggerAlias.ShouldBe("umbracoworkflow.resubmitted");
+        events[0].TriggerAlias.ShouldBe("umbracoWorkflow.resubmitted");
     }
 
     [Fact]
@@ -57,6 +60,17 @@ public class WorkflowResubmittedTriggerTests
         output.AuthorUserId.ShouldBe(authorId);
         output.AuthorComment.ShouldBe("Resubmitting after fixes");
         output.TotalSteps.ShouldBe(2);
+    }
+
+    [Fact]
+    public void MapEvent_WithNonPocoTarget_YieldsNoEvent()
+    {
+        var instance = Mock.Of<IWorkflowInstance>();
+        var notification = new WorkflowInstanceResubmittedNotification(instance, new EventMessages());
+
+        var events = _trigger.MapEvent(notification).ToList();
+
+        events.ShouldBeEmpty();
     }
 
     private static WorkflowInstanceResubmittedNotification BuildNotification()

@@ -4,7 +4,7 @@ using Umbraco.Workflow.Core.Email.Notifications;
 
 namespace Umbraco.Workflow.Automate.Triggers;
 
-[Trigger("umbracoworkflow.reminderEmailsSent", "Reminder Emails Sent",
+[Trigger("umbracoWorkflow.reminderEmailsSent", "Reminder Emails Sent",
     Description = "Fires when workflow reminder emails are sent to pending approvers.",
     Group = "Workflow",
     Icon = "icon-alarm-clock")]
