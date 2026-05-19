@@ -14,4 +14,8 @@
         <InternalsVisibleTo Include="Umbraco.Workflow.Automate.Tests.Unit" />
     </ItemGroup>
 
+    <ItemGroup>
+        <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
+
 </Project>
