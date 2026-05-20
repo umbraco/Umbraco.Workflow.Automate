@@ -9,7 +9,8 @@ namespace Umbraco.Workflow.Automate.Triggers;
 [Trigger("umbracoWorkflow.taskAssigned", "Task Assigned",
     Description = "Fires when a new workflow approval task is created and assigned.",
     Group = "Workflow",
-    Icon = "icon-user")]
+    Icon = "icon-user",
+    RequiredSections = [Constants.Sections.Workflow])]
 public sealed class TaskAssignedTrigger
     : NotificationTriggerBase<object, TaskAssignedTriggerOutput, WorkflowTaskCreatedNotification>
 {

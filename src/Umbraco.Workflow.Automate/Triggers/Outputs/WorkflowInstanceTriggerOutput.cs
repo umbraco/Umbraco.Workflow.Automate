@@ -1,6 +1,8 @@
+using Umbraco.Workflow.Automate.Dispatch;
+
 namespace Umbraco.Workflow.Automate.Triggers.Outputs;
 
-public sealed class WorkflowInstanceTriggerOutput
+public sealed class WorkflowInstanceTriggerOutput : IContentScopedWorkflowOutput
 {
     public required int NodeId { get; init; }
     public required Guid? EntityKey { get; init; }
@@ -11,4 +13,6 @@ public sealed class WorkflowInstanceTriggerOutput
     public required string Culture { get; init; }
     public required int TotalSteps { get; init; }
     public required DateTime CreatedDate { get; init; }
+
+    Guid? IContentScopedWorkflowOutput.GetContentKey() => EntityKey;
 }

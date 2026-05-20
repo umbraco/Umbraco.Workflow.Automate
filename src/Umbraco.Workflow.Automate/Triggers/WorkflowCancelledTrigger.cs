@@ -9,7 +9,8 @@ namespace Umbraco.Workflow.Automate.Triggers;
 [Trigger("umbracoWorkflow.cancelled", "Workflow Cancelled",
     Description = "Fires when a workflow instance is cancelled.",
     Group = "Workflow",
-    Icon = "icon-block")]
+    Icon = "icon-block",
+    RequiredSections = [Constants.Sections.Workflow])]
 public sealed class WorkflowCancelledTrigger
     : NotificationTriggerBase<object, WorkflowInstanceTriggerOutput, WorkflowInstanceCancelledNotification>
 {

@@ -11,9 +11,9 @@
 
   <!-- Umbraco Automate -->
   <ItemGroup>
-    <PackageVersion Include="Umbraco.Automate" Version="0.1.0--preview.353.g3ab423c" />
-    <PackageVersion Include="Umbraco.Automate.Core" Version="0.1.0--preview.353.g3ab423c" />
-    <PackageVersion Include="Umbraco.Automate.Testing" Version="0.1.0--preview.353.g3ab423c" />
+    <PackageVersion Include="Umbraco.Automate" Version="[0.1.0--preview.420.ge63c76a, 0.999.999)" />
+    <PackageVersion Include="Umbraco.Automate.Core" Version="[0.1.0--preview.420.ge63c76a, 0.999.999)" />
+    <PackageVersion Include="Umbraco.Automate.Testing" Version="[0.1.0--preview.420.ge63c76a, 0.999.999)" />
   </ItemGroup>
 
   <!-- Umbraco Workflow -->

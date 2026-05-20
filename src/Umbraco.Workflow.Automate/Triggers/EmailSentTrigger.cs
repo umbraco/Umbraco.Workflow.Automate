@@ -7,7 +7,8 @@ namespace Umbraco.Workflow.Automate.Triggers;
 [Trigger("umbracoWorkflow.emailSent", "Workflow Email Sent",
     Description = "Fires when a workflow notification email is sent.",
     Group = "Workflow",
-    Icon = "icon-bell")]
+    Icon = "icon-bell",
+    RequiredSections = [Constants.Sections.Workflow])]
 public sealed class EmailSentTrigger
     : NotificationTriggerBase<object, EmailSentTriggerOutput, WorkflowEmailNotificationsSentNotification>
 {

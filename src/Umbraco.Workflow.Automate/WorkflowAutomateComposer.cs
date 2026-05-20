@@ -1,5 +1,7 @@
+using Umbraco.Automate.Extensions;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
+using Umbraco.Workflow.Automate.Dispatch;
 
 namespace Umbraco.Workflow.Automate;
 
@@ -15,5 +17,11 @@ public sealed class WorkflowAutomateComposer : IComposer
 {
     public void Compose(IUmbracoBuilder builder)
     {
+        // Gates dispatch of content-scoped workflow triggers against the workspace service
+        // account's start-node path. The built-in NodeScopedTriggerDispatchAuthorizer only
+        // recognises Automate's own content/media triggers — Workflow's are distinct
+        // outputs, so we register a sibling authoriser keyed on IContentScopedWorkflowOutput.
+        builder.AutomateTriggerDispatchAuthorizers()
+            .Add<WorkflowContentDispatchAuthorizer>();
     }
 }

@@ -7,7 +7,8 @@ namespace Umbraco.Workflow.Automate.Triggers;
 [Trigger("umbracoWorkflow.reminderEmailsSent", "Reminder Emails Sent",
     Description = "Fires when workflow reminder emails are sent to pending approvers.",
     Group = "Workflow",
-    Icon = "icon-alarm-clock")]
+    Icon = "icon-alarm-clock",
+    RequiredSections = [Constants.Sections.Workflow])]
 public sealed class ReminderEmailsSentTrigger
     : NotificationTriggerBase<object, ReminderEmailsSentTriggerOutput, WorkflowEmailRemindersSentNotification>
 {

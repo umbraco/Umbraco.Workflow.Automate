@@ -9,7 +9,8 @@ namespace Umbraco.Workflow.Automate.Triggers;
 [Trigger("umbracoWorkflow.approved", "Workflow Approved",
     Description = "Fires when a workflow instance is approved.",
     Group = "Workflow",
-    Icon = "icon-thumb-up")]
+    Icon = "icon-thumb-up",
+    RequiredSections = [Constants.Sections.Workflow])]
 public sealed class WorkflowApprovedTrigger
     : NotificationTriggerBase<object, WorkflowInstanceTriggerOutput, WorkflowInstanceApprovedNotification>
 {
