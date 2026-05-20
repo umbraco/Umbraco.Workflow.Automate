@@ -14,6 +14,6 @@ public static class Constants
         /// The Workflow section — required for any step type that operates on workflow
         /// instances, content reviews, or workflow-related notifications.
         /// </summary>
-        public const string Workflow = "workflow";
+        public const string Workflow = "Umb.Section.Workflow";
     }
 }
