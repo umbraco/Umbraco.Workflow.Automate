@@ -9,7 +9,8 @@ namespace Umbraco.Workflow.Automate.Triggers;
 [Trigger("umbracoWorkflow.completed", "Workflow Completed",
     Description = "Fires when a workflow instance completes successfully.",
     Group = "Workflow",
-    Icon = "icon-check")]
+    Icon = "icon-check",
+    RequiredSections = [Constants.Sections.Workflow])]
 public sealed class WorkflowCompletedTrigger
     : NotificationTriggerBase<object, WorkflowCompletedTriggerOutput, WorkflowInstanceCompletedNotification>
 {

@@ -9,7 +9,8 @@ namespace Umbraco.Workflow.Automate.Triggers;
 [Trigger("umbracoWorkflow.started", "Workflow Started",
     Description = "Fires when a new workflow instance is created.",
     Group = "Workflow",
-    Icon = "icon-activity")]
+    Icon = "icon-activity",
+    RequiredSections = [Constants.Sections.Workflow])]
 public sealed class WorkflowStartedTrigger
     : NotificationTriggerBase<object, WorkflowInstanceTriggerOutput, WorkflowInstanceCreatedNotification>
 {

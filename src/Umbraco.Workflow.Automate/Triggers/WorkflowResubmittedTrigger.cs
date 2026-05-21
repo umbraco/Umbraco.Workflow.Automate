@@ -9,7 +9,8 @@ namespace Umbraco.Workflow.Automate.Triggers;
 [Trigger("umbracoWorkflow.resubmitted", "Workflow Resubmitted",
     Description = "Fires when a rejected workflow instance is resubmitted for approval.",
     Group = "Workflow",
-    Icon = "icon-sync")]
+    Icon = "icon-sync",
+    RequiredSections = [Constants.Sections.Workflow])]
 public sealed class WorkflowResubmittedTrigger
     : NotificationTriggerBase<object, WorkflowInstanceTriggerOutput, WorkflowInstanceResubmittedNotification>
 {

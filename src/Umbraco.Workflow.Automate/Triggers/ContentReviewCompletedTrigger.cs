@@ -7,7 +7,8 @@ namespace Umbraco.Workflow.Automate.Triggers;
 [Trigger("umbracoWorkflow.contentReviewCompleted", "Content Review Completed",
     Description = "Fires when a content review is completed.",
     Group = "Workflow",
-    Icon = "icon-document")]
+    Icon = "icon-document",
+    RequiredSections = [Constants.Sections.Workflow])]
 public sealed class ContentReviewCompletedTrigger
     : NotificationTriggerBase<object, ContentReviewCompletedTriggerOutput, WorkflowContentReviewsReviewedNotification>
 {

@@ -9,7 +9,8 @@ namespace Umbraco.Workflow.Automate.Triggers;
 [Trigger("umbracoWorkflow.rejected", "Workflow Rejected",
     Description = "Fires when a workflow instance is rejected.",
     Group = "Workflow",
-    Icon = "icon-thumb-down")]
+    Icon = "icon-thumb-down",
+    RequiredSections = [Constants.Sections.Workflow])]
 public sealed class WorkflowRejectedTrigger
     : NotificationTriggerBase<object, WorkflowInstanceTriggerOutput, WorkflowInstanceRejectedNotification>
 {
