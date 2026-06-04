@@ -1,18 +1,39 @@
 # Umbraco.Workflow.Automate
 
-Connects [Umbraco Workflow](https://umbraco.com/products/umbraco-workflow/) to [Umbraco Automate](https://umbraco.com/products/umbraco-automate/), exposing workflow events as first-class triggers in Automate flows.
+Umbraco Workflow triggers for [Umbraco Automate](https://umbraco.com/products/umbraco-automate/).
 
-> **Built heavily with [Claude](https://claude.ai) (Anthropic)** — this package was designed and implemented with AI-assisted development as an experiment in how far you can take AI pair programming on a real Umbraco package.
+## Overview
 
----
+Umbraco.Workflow.Automate is a provider package that connects [Umbraco Workflow](https://umbraco.com/products/umbraco-workflow/) to Umbraco Automate, exposing workflow events as first-class triggers in Automate flows — for example, notifying a channel when a workflow is rejected, or escalating when reminder emails pile up.
 
-## What's in the box
+## Key Features
 
-### Triggers
+- **10 triggers** — react to workflow lifecycle, task assignment, email, and content review events
+- **Rich trigger outputs** — node IDs, entity keys, workflow types and statuses, authors, comments, and timestamps
+- **Native notifications** — Workflow publishes standard CMS notifications, so no bridge handlers are required
+- **Zero configuration** — `WorkflowAutomateComposer` self-registers with Umbraco's composition pipeline
+
+## Installation
+
+```bash
+dotnet add package Umbraco.Workflow.Automate
+```
+
+No further wiring is required — the composer is auto-discovered by Umbraco's composition system.
+
+## Requirements
+
+- .NET 10.0
+- Umbraco CMS 17.x
+- Umbraco Workflow 17.x
+- Umbraco.Automate 0.1+
+
+## Triggers
 
 Fire an Automate flow when something happens in Workflow.
 
 **Workflow Lifecycle**
+
 | Trigger | Fires when… |
 |---|---|
 | Workflow Started | A new workflow instance is created |
@@ -23,26 +44,27 @@ Fire an Automate flow when something happens in Workflow.
 | Workflow Resubmitted | A rejected workflow is resubmitted for approval |
 
 **Tasks**
+
 | Trigger | Fires when… |
 |---|---|
 | Task Assigned | A new approval task is created and assigned to a group |
 
 **Emails**
+
 | Trigger | Fires when… |
 |---|---|
 | Workflow Email Sent | A workflow notification email is sent |
 | Reminder Emails Sent | Reminder emails are sent to pending approvers |
 
 **Content Reviews**
+
 | Trigger | Fires when… |
 |---|---|
 | Content Review Completed | A content review is completed |
 
----
-
 ## Trigger Outputs
 
-#### Workflow Started / Approved / Rejected / Cancelled / Resubmitted Output
+### Workflow Started / Approved / Rejected / Cancelled / Resubmitted
 
 | Property | Type | Description |
 |---|---|---|
@@ -56,7 +78,7 @@ Fire an Automate flow when something happens in Workflow.
 | `TotalSteps` | `int` | Total number of approval steps |
 | `CreatedDate` | `DateTime` | When the workflow was started |
 
-#### Workflow Completed Output
+### Workflow Completed
 
 All properties from above, plus:
 
@@ -64,7 +86,7 @@ All properties from above, plus:
 |---|---|---|
 | `CompletedDate` | `DateTime?` | When the workflow finished |
 
-#### Task Assigned Output
+### Task Assigned
 
 | Property | Type | Description |
 |---|---|---|
@@ -73,22 +95,22 @@ All properties from above, plus:
 | `WorkflowInstanceGuid` | `Guid` | The workflow instance this task belongs to |
 | `TaskType` | `string` | The task status type |
 
-#### Workflow Email Sent Output
+### Workflow Email Sent
 
 | Property | Type | Description |
 |---|---|---|
 | `EmailType` | `string` | Type of email (e.g. `"ApprovalRequest"`, `"ApprovedNotification"`) |
 | `RecipientCount` | `int` | Number of recipients |
-| `RecipientEmails` | `IEnumerable<string>` | Recipient email addresses (null/empty entries are filtered out) |
+| `RecipientEmails` | `IEnumerable<string>` | Recipient email addresses |
 
-#### Reminder Emails Sent Output
+### Reminder Emails Sent
 
 | Property | Type | Description |
 |---|---|---|
 | `InstanceCount` | `int` | Number of workflow instances reminders were sent for |
 | `TaskCount` | `int` | Number of pending tasks across all instances |
 
-#### Content Review Completed Output
+### Content Review Completed
 
 | Property | Type | Description |
 |---|---|---|
@@ -97,49 +119,20 @@ All properties from above, plus:
 | `DueOn` | `DateTime` | When the content review was due |
 | `ReviewedOn` | `DateTime` | When the content review was completed |
 
----
-
-## Installation
-
-```bash
-dotnet add package Umbraco.Workflow.Automate
-```
-
-`WorkflowAutomateComposer` is auto-discovered by Umbraco's composition system. No manual registration is required.
-
-### Requirements
-
-| Dependency | Version |
-|---|---|
-| .NET | 10 |
-| Umbraco CMS | 17.x |
-| Umbraco Workflow | 17.x |
-| Umbraco Automate | 0.1+ |
-
----
-
 ## Usage Examples
 
 ### Notify a Slack channel when a workflow is rejected
 
 ```
-Trigger: Workflow Rejected (umbracoWorkflow.rejected)
+Trigger: Workflow Rejected
   → Action: Post Slack message to #content-team
             "Workflow rejected for node {NodeId}: {AuthorComment}"
-```
-
-### Send an alert when content review is overdue
-
-```
-Trigger: Reminder Emails Sent (umbracoWorkflow.reminderEmailsSent)
-  → Condition: TaskCount > 5
-  → Action: Send escalation email to content manager
 ```
 
 ### Log all completed publish workflows
 
 ```
-Trigger: Workflow Completed (umbracoWorkflow.completed)
+Trigger: Workflow Completed
   → Condition: WorkflowType == "Publish"
   → Action: Write to external log
             "Published by {AuthorUserId} after {TotalSteps} steps"
@@ -148,63 +141,16 @@ Trigger: Workflow Completed (umbracoWorkflow.completed)
 ### React when a specific approval group is assigned
 
 ```
-Trigger: Task Assigned (umbracoWorkflow.taskAssigned)
+Trigger: Task Assigned
   → Condition: GroupId == "your-group-guid"
   → Action: Send notification to group members
 ```
 
-### Audit all outgoing workflow emails
+## How It Works
 
-```
-Trigger: Workflow Email Sent (umbracoWorkflow.emailSent)
-  → Action: Write recipients and email type to audit log
-```
-
----
-
-## How it works
-
-Umbraco Workflow publishes notifications directly through Umbraco CMS's standard `IEventAggregator` (as `INotification`). Because of this, **no bridge handlers are required** — triggers subscribe to Workflow notifications natively, exactly like any other Umbraco CMS notification.
-
-`WorkflowAutomateComposer` is minimal and exists only to ensure the assembly is discovered by Umbraco.
-
----
-
-## Future Triggers (Not Yet Implemented)
-
-The following Umbraco Workflow notifications exist and could be exposed as triggers in a future version:
-
-| Notification | Description |
-|---|---|
-| `WorkflowInstanceCreatingNotification` | Cancelable — fires before a workflow starts |
-| `WorkflowInstanceApprovingNotification` | Cancelable — fires before an approval is recorded |
-| `WorkflowInstanceRejectingNotification` | Cancelable — fires before a rejection is recorded |
-| `WorkflowInstanceCancellingNotification` | Cancelable — fires before a cancellation |
-| `WorkflowInstanceResubmittingNotification` | Cancelable — fires before a resubmission |
-| `WorkflowResubmitTaskCreatedNotification` | Fires when a resubmit task is created |
-| `WorkflowTaskUpdatedNotification` | Fires when a task is updated |
-
-> **Note on cancelable notifications:** These fire before the action occurs. Cancellation is not available through the Automate trigger system — they would fire for observation only.
-
----
-
-## Future Actions (Not Yet Implemented)
-
-The following Workflow operations could be exposed as Automate actions in a future version:
-
-| Action | Description |
-|---|---|
-| Approve workflow step | Programmatically approve a pending task |
-| Reject workflow step | Programmatically reject a pending task |
-| Cancel workflow | Cancel a running workflow instance |
-| Initiate workflow | Start a workflow for a given content node |
-| Send reminder emails | Trigger reminder emails manually |
-
----
+Umbraco Workflow publishes notifications directly through Umbraco CMS's standard `IEventAggregator` (as `INotification`), so triggers subscribe to Workflow notifications natively — no bridge handlers are required. `WorkflowAutomateComposer` is minimal and exists only to ensure the assembly is discovered by Umbraco.
 
 ## Development
-
-### Building
 
 ```bash
 dotnet restore
@@ -216,25 +162,13 @@ dotnet test
 
 ```
 src/
-  Umbraco.Workflow.Automate/       # Package source
-    Triggers/                      # Automate triggers
-    Triggers/Outputs/              # Trigger output types
-    WorkflowAutomateComposer.cs    # DI composition entry point (minimal — no bridge needed)
+  Umbraco.Workflow.Automate/         # Package source
+    Triggers/                        # Automate triggers
+    Triggers/Outputs/                # Trigger output types
 tests/
   Umbraco.Workflow.Automate.Tests.Unit/
-    Triggers/                      # 34 unit tests covering all 10 triggers
 ```
-
-### CI pipeline
-
-The Azure Pipelines workflow (`azure-pipelines.yml`) builds, runs tests cross-platform (Windows, Linux, macOS), and packages to a pipeline artifact. **It does not push to NuGet** — publishing is a manual, deliberate step.
-
----
 
 ## License
 
-[MIT](LICENSE)
-
----
-
-> *This package was built heavily with [Claude](https://claude.ai) by Anthropic as part of an experiment in AI-assisted Umbraco package development. The architecture, implementation, tests, and documentation were all produced through an iterative conversation with Claude Code.*
+MIT — see [LICENSE](LICENSE) for details.
