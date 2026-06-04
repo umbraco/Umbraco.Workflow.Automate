@@ -26,7 +26,7 @@ No further wiring is required — the composer is auto-discovered by Umbraco's c
 - .NET 10.0
 - Umbraco CMS 17.x
 - Umbraco Workflow 17.x
-- Umbraco.Automate 0.1+
+- Umbraco.Automate 17.0+
 
 ## Triggers
 
