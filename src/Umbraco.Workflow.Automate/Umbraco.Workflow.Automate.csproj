@@ -3,6 +3,7 @@
     <PropertyGroup>
         <Title>Umbraco Workflow Automate</Title>
         <Description>Umbraco Workflow triggers for Umbraco Automate</Description>
+        <PackageTags>$(PackageTags);umbraco-marketplace</PackageTags>
     </PropertyGroup>
 
     <ItemGroup>
