@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Logging;
 using Umbraco.Automate.Core.Triggers;
 using Umbraco.Workflow.Automate.Triggers.Outputs;
-using Umbraco.Workflow.Core.Models.Pocos;
+using Umbraco.Workflow.Core.ContentApprovals.Models;
 using Umbraco.Workflow.Core.Notifications;
 
 namespace Umbraco.Workflow.Automate.Triggers;
@@ -24,12 +24,12 @@ public sealed class WorkflowResubmittedTrigger
 
     public override IEnumerable<TriggerEvent> MapEvent(WorkflowInstanceResubmittedNotification notification)
     {
-        if (notification.UpdatedEntity is not WorkflowInstancePoco instance)
+        if (notification.UpdatedEntity is not WorkflowInstanceDto instance)
         {
             _logger.LogWarning(
                 "{TriggerAlias}: expected {ExpectedType}, received {ActualType}; skipping.",
                 Alias,
-                nameof(WorkflowInstancePoco),
+                nameof(WorkflowInstanceDto),
                 notification.UpdatedEntity?.GetType().FullName ?? "null");
             yield break;
         }

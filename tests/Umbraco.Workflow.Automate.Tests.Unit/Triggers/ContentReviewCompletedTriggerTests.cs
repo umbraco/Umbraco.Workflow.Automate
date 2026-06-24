@@ -5,7 +5,7 @@ using Umbraco.Workflow.Automate.Triggers;
 using Umbraco.Workflow.Automate.Triggers.Outputs;
 using Umbraco.Workflow.Core.ContentReviews.Models;
 using Umbraco.Workflow.Core.ContentReviews.Notifications;
-using Umbraco.Workflow.Core.ViewModels;
+using Umbraco.Workflow.Core.ContentApprovals.ViewModels;
 
 namespace Umbraco.Workflow.Automate.Tests.Unit.Triggers;
 
@@ -43,11 +43,12 @@ public class ContentReviewCompletedTriggerTests
         var reviewedOn = DateTime.UtcNow;
         var review = new ContentReviewRequestModel
         {
-            Document = new DocumentItemResponseModel
+            Document = new WorkflowEntityItemResponseModel
             {
                 Unique = documentKey,
                 Name = "Home Page",
                 Culture = "en-US",
+                Type = "Document",
             },
             DueOn = dueOn,
             ReviewedOn = reviewedOn,
@@ -68,11 +69,12 @@ public class ContentReviewCompletedTriggerTests
     {
         var review = new ContentReviewRequestModel
         {
-            Document = new DocumentItemResponseModel
+            Document = new WorkflowEntityItemResponseModel
             {
                 Unique = Guid.NewGuid(),
                 Name = null,
                 Culture = "en-US",
+                Type = "Document",
             },
             DueOn = DateTime.UtcNow,
         };
@@ -88,11 +90,12 @@ public class ContentReviewCompletedTriggerTests
     {
         var review = new ContentReviewRequestModel
         {
-            Document = new DocumentItemResponseModel
+            Document = new WorkflowEntityItemResponseModel
             {
                 Unique = Guid.NewGuid(),
                 Name = "Test Document",
                 Culture = "en-US",
+                Type = "Document",
             },
             DueOn = DateTime.UtcNow,
         };

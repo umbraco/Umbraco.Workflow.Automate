@@ -5,8 +5,8 @@ using Umbraco.Workflow.Automate.Triggers;
 using Umbraco.Workflow.Automate.Triggers.Outputs;
 using Umbraco.Workflow.Core.Email.Models;
 using Umbraco.Workflow.Core.Email.Notifications;
-using Umbraco.Workflow.Core.Interfaces;
-using Umbraco.Workflow.Core.Models.Pocos;
+using Umbraco.Workflow.Core.ContentApprovals.Interfaces;
+using Umbraco.Workflow.Core.ContentApprovals.Models;
 
 namespace Umbraco.Workflow.Automate.Tests.Unit.Triggers;
 
@@ -41,8 +41,8 @@ public class ReminderEmailsSentTriggerTests
     {
         var instances = new List<IWorkflowInstance>
         {
-            new WorkflowInstancePoco(),
-            new WorkflowInstancePoco(),
+            new WorkflowInstanceDto(),
+            new WorkflowInstanceDto(),
         };
         var tasks = new List<EmailTaskListModel>
         {

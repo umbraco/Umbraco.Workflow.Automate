@@ -4,9 +4,8 @@ using Umbraco.Automate.Core.Triggers;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Workflow.Automate.Triggers;
 using Umbraco.Workflow.Automate.Triggers.Outputs;
-using Umbraco.Workflow.Core.Interfaces;
-using Umbraco.Workflow.Core.Models.Enums;
-using Umbraco.Workflow.Core.Models.Pocos;
+using Umbraco.Workflow.Core.ContentApprovals.Interfaces;
+using Umbraco.Workflow.Core.ContentApprovals.Models;
 using Umbraco.Workflow.Core.Notifications;
 
 namespace Umbraco.Workflow.Automate.Tests.Unit.Triggers;
@@ -42,7 +41,7 @@ public class WorkflowCompletedTriggerTests
     public void MapEvent_MapsCompletedProperties()
     {
         var completedDate = DateTime.UtcNow;
-        var instance = new WorkflowInstancePoco
+        var instance = new WorkflowInstanceDto
         {
             NodeId = 42,
             Type = (int)WorkflowType.Unpublish,
@@ -63,7 +62,7 @@ public class WorkflowCompletedTriggerTests
     [Fact]
     public void MapEvent_WithNullStringFields_FallsBackToEmptyAndPropagatesNullKey()
     {
-        var instance = new WorkflowInstancePoco
+        var instance = new WorkflowInstanceDto
         {
             Type = (int)WorkflowType.Publish,
             EntityKey = null,
@@ -93,7 +92,7 @@ public class WorkflowCompletedTriggerTests
 
     private static WorkflowInstanceCompletedNotification BuildNotification()
     {
-        var instance = new WorkflowInstancePoco { Type = (int)WorkflowType.Publish };
+        var instance = new WorkflowInstanceDto { Type = (int)WorkflowType.Publish };
         return new WorkflowInstanceCompletedNotification(instance, new EventMessages());
     }
 }

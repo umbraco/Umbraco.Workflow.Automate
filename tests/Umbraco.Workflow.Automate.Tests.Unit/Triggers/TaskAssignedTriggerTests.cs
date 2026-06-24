@@ -4,11 +4,10 @@ using Umbraco.Automate.Core.Triggers;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Workflow.Automate.Triggers;
 using Umbraco.Workflow.Automate.Triggers.Outputs;
-using Umbraco.Workflow.Core.Interfaces;
-using Umbraco.Workflow.Core.Models.Enums;
-using Umbraco.Workflow.Core.Models.Pocos;
+using Umbraco.Workflow.Core.ContentApprovals.Interfaces;
+using Umbraco.Workflow.Core.ContentApprovals.Models;
 using Umbraco.Workflow.Core.Notifications;
-using WorkflowTaskStatus = Umbraco.Workflow.Core.Models.Enums.TaskStatus;
+using WorkflowTaskStatus = Umbraco.Workflow.Core.ContentApprovals.Models.TaskStatus;
 
 namespace Umbraco.Workflow.Automate.Tests.Unit.Triggers;
 
@@ -44,7 +43,7 @@ public class TaskAssignedTriggerTests
     {
         var groupId = Guid.NewGuid();
         var instanceGuid = Guid.NewGuid();
-        var task = new WorkflowTaskPoco
+        var task = new WorkflowTaskDto
         {
             ApprovalStep = 2,
             GroupId = groupId,
@@ -65,7 +64,7 @@ public class TaskAssignedTriggerTests
     [Fact]
     public void MapEvent_WithNullTaskStatus_FallsBackToEmpty()
     {
-        var task = new WorkflowTaskPoco
+        var task = new WorkflowTaskDto
         {
             ApprovalStep = 1,
             Status = null,
@@ -91,7 +90,7 @@ public class TaskAssignedTriggerTests
 
     private static WorkflowTaskCreatedNotification BuildNotification()
     {
-        var task = new WorkflowTaskPoco();
+        var task = new WorkflowTaskDto();
         return new WorkflowTaskCreatedNotification(task, new EventMessages());
     }
 }
