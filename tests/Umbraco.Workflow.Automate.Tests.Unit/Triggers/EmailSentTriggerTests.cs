@@ -5,7 +5,7 @@ using Umbraco.Workflow.Automate.Triggers;
 using Umbraco.Workflow.Automate.Triggers.Outputs;
 using Umbraco.Workflow.Core.Email.Models;
 using Umbraco.Workflow.Core.Email.Notifications;
-using Umbraco.Workflow.Core.Models.Enums;
+using Umbraco.Workflow.Core.ContentApprovals.Models;
 
 namespace Umbraco.Workflow.Automate.Tests.Unit.Triggers;
 

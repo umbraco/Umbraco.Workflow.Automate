@@ -4,9 +4,8 @@ using Umbraco.Automate.Core.Triggers;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Workflow.Automate.Triggers;
 using Umbraco.Workflow.Automate.Triggers.Outputs;
-using Umbraco.Workflow.Core.Interfaces;
-using Umbraco.Workflow.Core.Models.Enums;
-using Umbraco.Workflow.Core.Models.Pocos;
+using Umbraco.Workflow.Core.ContentApprovals.Interfaces;
+using Umbraco.Workflow.Core.ContentApprovals.Models;
 using Umbraco.Workflow.Core.Notifications;
 
 namespace Umbraco.Workflow.Automate.Tests.Unit.Triggers;
@@ -41,7 +40,7 @@ public class WorkflowRejectedTriggerTests
     [Fact]
     public void MapEvent_MapsInstanceProperties()
     {
-        var instance = new WorkflowInstancePoco
+        var instance = new WorkflowInstanceDto
         {
             NodeId = 55,
             Type = (int)WorkflowType.Publish,
@@ -71,7 +70,7 @@ public class WorkflowRejectedTriggerTests
 
     private static WorkflowInstanceRejectedNotification BuildNotification()
     {
-        var instance = new WorkflowInstancePoco { Type = (int)WorkflowType.Publish };
+        var instance = new WorkflowInstanceDto { Type = (int)WorkflowType.Publish };
         return new WorkflowInstanceRejectedNotification(instance, new EventMessages());
     }
 }

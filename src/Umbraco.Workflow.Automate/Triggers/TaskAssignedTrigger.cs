@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Logging;
 using Umbraco.Automate.Core.Triggers;
 using Umbraco.Workflow.Automate.Triggers.Outputs;
-using Umbraco.Workflow.Core.Models.Pocos;
+using Umbraco.Workflow.Core.ContentApprovals.Models;
 using Umbraco.Workflow.Core.Notifications;
 
 namespace Umbraco.Workflow.Automate.Triggers;
@@ -24,12 +24,12 @@ public sealed class TaskAssignedTrigger
 
     public override IEnumerable<TriggerEvent> MapEvent(WorkflowTaskCreatedNotification notification)
     {
-        if (notification.CreatedEntity is not WorkflowTaskPoco task)
+        if (notification.CreatedEntity is not WorkflowTaskDto task)
         {
             _logger.LogWarning(
                 "{TriggerAlias}: expected {ExpectedType}, received {ActualType}; skipping.",
                 Alias,
-                nameof(WorkflowTaskPoco),
+                nameof(WorkflowTaskDto),
                 notification.CreatedEntity?.GetType().FullName ?? "null");
             yield break;
         }
