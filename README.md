@@ -19,18 +19,22 @@ Umbraco.Workflow.Automate is a provider package that connects [Umbraco Workflow]
 
 ## Installation
 
+Version 19 is a pre-release (labelled `-rcN`) while Umbraco CMS 19 is in pre-release. It is on nuget.org, so there is no feed to add. Install it with `--prerelease`:
+
 ```bash
-dotnet add package Umbraco.Workflow.Automate
+dotnet add package Umbraco.Workflow.Automate --prerelease
 ```
+
+Version 18 installs without the flag: `dotnet add package Umbraco.Workflow.Automate`.
 
 No further wiring is required — the composer is auto-discovered by Umbraco's composition system.
 
 ## Requirements
 
-- .NET 10.0
-- Umbraco CMS 18.x
-- Umbraco Workflow 18.x
-- Umbraco.Automate 18.0+
+- .NET 11.0
+- Umbraco CMS 19
+- Umbraco Workflow 19
+- Umbraco Automate 19
 
 ## Triggers
 

@@ -12,7 +12,7 @@ Example: notify a channel when a workflow is rejected, or escalate when reminder
 
 ### Requirements
 
-- Umbraco CMS 17.x
-- Umbraco Workflow 17.x
-- Umbraco.Automate 17.0+
-- .NET 10.0
+- Umbraco CMS 19
+- Umbraco Workflow 19
+- Umbraco Automate 19
+- .NET 11.0
