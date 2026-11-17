@@ -1,7 +1,6 @@
 <Project>
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-    <CentralPackageFloatingVersionsEnabled>true</CentralPackageFloatingVersionsEnabled>
   </PropertyGroup>
 
   <!-- Versioning -->
@@ -12,14 +11,14 @@
 
   <!-- Umbraco Automate -->
   <ItemGroup>
-    <PackageVersion Include="Umbraco.Automate" Version="[18.0.0, 18.999.999)" />
-    <PackageVersion Include="Umbraco.Automate.Core" Version="[18.0.0, 18.999.999)" />
-    <PackageVersion Include="Umbraco.Automate.Testing" Version="[18.0.0, 18.999.999)" />
+    <PackageVersion Include="Umbraco.Automate" Version="[19.0.0-rc1, 19.999.999)" />
+    <PackageVersion Include="Umbraco.Automate.Core" Version="[19.0.0-rc1, 19.999.999)" />
+    <PackageVersion Include="Umbraco.Automate.Testing" Version="[19.0.0-rc1, 19.999.999)" />
   </ItemGroup>
 
   <!-- Umbraco Workflow -->
   <ItemGroup>
-    <PackageVersion Include="Umbraco.Workflow.Core" Version="[18.0.0, 18.999.999)" />
+    <PackageVersion Include="Umbraco.Workflow.Core" Version="[19.0.0-rc1, 19.999.999)" />
   </ItemGroup>
 
   <!-- Test dependencies -->
